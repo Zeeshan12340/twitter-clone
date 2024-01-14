@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import useUserInfo from '../hooks/useUserInfo';
+import UseUserInfo from '../hooks/UseUserInfo';
 
-export default function usernameForm() {
-    const {userInfo, status} = useUserInfo();
+export default function UsernameForm() {
+    const {userInfo, status} = UseUserInfo();
     const [username, setUsername] = useState('');
     const router = useRouter();
 
@@ -15,7 +15,7 @@ export default function usernameForm() {
         } else {
             setUsername(username.replace(/[^a-z]+/gi, ''));
         }
-    }, [status])
+    }, [status, username])
 
     async function handleSubmit(e) {
         e.preventDefault();

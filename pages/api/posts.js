@@ -2,23 +2,45 @@ import { initDb } from "@/lib/mongoose";
 import Post from "../../models/Post";
 import { authOptions } from "./auth/[...nextauth]";
 import { getServerSession } from "next-auth"
+import Like from "../../models/Like";
 
 export default async function handler(req, res) {
     await initDb();
     const session = await getServerSession(req, res, authOptions)
 
     if (req.method === 'GET') {
-        const posts = await Post.find()
-        .populate('author')
-        .sort({createdAt: -1})
-        .exec();
-        return res.status(200).json(posts);
+        const {id} = req.query
+        if (id) {
+            res.status(200).json(await Post.findById(id).populate('author').exec());
+        } else {
+            const parent = req.query.parent || null;
+            const posts = await Post.find({ parent })
+            .populate('author')
+            .sort({createdAt: -1})
+            .limit(20)
+            .exec();
+
+            const postsLikedByMe = await Like.find({ 
+                author: session?.user.id,
+                post: posts.map(p => p._id)
+            })
+            const idsLikedByMe = postsLikedByMe.map(like => like.post)
+            return res.status(200).json({
+                posts,
+                idsLikedByMe
+            });
+        }
     }
 
     if (req.method === 'POST') {
-        const {text} = req.body;
+        const {text, parent} = req.body;
         if (!text) return res.status(400).json({message: 'Missing text'});
-        const post = await Post.create({author: session.user.id, text});
+        const post = await Post.create({author: session.user.id, text, parent});
+        if (parent) {
+            const parentPost = await Post.findById(parent);
+            parentPost.commentsCount = await Post.countDocuments({parent});
+            await parentPost.save();
+        }
         return res.status(200).json(post);
     }
 }
