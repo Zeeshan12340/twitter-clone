@@ -10,15 +10,21 @@ export default function PostContent({
     return (
         <div>
             <div className="flex w-full">
-                <Avatar src={author.image} />
+                <Link href={'/' + author.username}>
+                    <div className="cursor-pointer">
+                        <Avatar src={author.image} />
+                    </div>
+                </Link>
                 <div className="pl-2 grow mt-3">
                     <div className="">
-                        <span className="font-bold pr-1">{author.name}</span>
-                        {big && (<br />)}
-                        <span className="text-socialLightGrey">@{author.username}</span>
-                        {createdAt && !big && (
-                            <span className="pl-1 text-socialLightGrey"><ReactTimeAgo date={createdAt} timeStyle={"twitter"}/></span>
-                        )}
+                        <Link href={'/' + author.username}>
+                            <span className="font-bold pr-1">{author.name}</span>
+                            {big && (<br />)}
+                            <span className="text-socialLightGrey">@{author.username}</span>
+                            {createdAt && !big && (
+                                <span className="pl-1 text-socialLightGrey"><ReactTimeAgo date={createdAt} timeStyle={"twitter"}/></span>
+                            )}
+                        </Link>
                     </div>
                 </div>
                 <br />
@@ -30,7 +36,7 @@ export default function PostContent({
                             {text}
                         </div>
                     </Link>
-                    <PostButtons id={_id} likesCount={likesCount} likedByMe={likedByMe} commentsCount={commentsCount} />
+                    <PostButtons username={author.username} id={_id} likesCount={likesCount} likedByMe={likedByMe} commentsCount={commentsCount} />
                 </div>
             )}
             {big && (
@@ -46,7 +52,7 @@ export default function PostContent({
                             .split(' ').reverse().join(' '))}
                         </div>
                     )}
-                    <PostButtons id={_id} likesCount={likesCount} likedByMe={likedByMe} commentsCount={commentsCount} />
+                    <PostButtons username={author.username} id={_id} likesCount={likesCount} likedByMe={likedByMe} commentsCount={commentsCount} />
                 </div>
             )}
         </div>

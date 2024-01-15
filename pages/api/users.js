@@ -8,8 +8,10 @@ export default async function Users(req, res) {
     const session = await getServerSession(req, res, authOptions)
 
     if (req.method === 'GET') {
-        const id = req.query.id;
-        const user = await User.findById(id);
+        const {id, username} = req.query;
+        const user = id ?
+        await User.findById(id):
+        await User.findOne({username});
         res.json({id, user});
     }
     if (req.method === 'PUT') {

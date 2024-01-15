@@ -21,12 +21,12 @@ export default function Layout({children, userInfo, logout}) {
 
             {/* right content */}
             <div className="fixed" style={{ right: 0, top: 0 }} >
-                {!userInfo && (
+                {!userInfo && (router.pathname == "/") && (
                     <div className="mr-8 my-5">
                         <button className="bg-socialWhite text-black px-5 py-2 rounded-full" onClick={redirectLogin}>Login</button>
                     </div>
                 )}
-                {userInfo && (
+                {userInfo && (router.pathname == "/") && (
                     <div className="mr-8 my-5">
                         <button className="bg-socialWhite text-black px-5 py-2 rounded-full" onClick={logout}>Logout</button>
                     </div>

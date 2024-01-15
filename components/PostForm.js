@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/router';
 import Avatar from './Avatar';
 
-export default function PostForm({userInfo, onPost, compact, parent}) {
+export default function PostForm({userInfo, onPost, compact, parent, onChange}) {
     const [text, setText] = useState('');
-    const router = useRouter();
 
     async function handleTweet(e) {
         e.preventDefault();
@@ -20,7 +18,7 @@ export default function PostForm({userInfo, onPost, compact, parent}) {
     return (
         <form className="mx-5" onSubmit={handleTweet}>
         <div className={( compact? 'items-center ':'') + "flex"}>
-          <Avatar src={userInfo?.image} classNames={'mt-1'} />
+          <Avatar src={userInfo?.image} big classNames={'mt-1'} onChange={onChange} />
           <div className="flex-grow pl-4">
             <textarea className={(compact? 'h-10': 'h-24') + " w-full p-2 bg-transparent text-socialWhite"}
             placeholder={(compact? "Tweet your reply":"What's happening?")}
