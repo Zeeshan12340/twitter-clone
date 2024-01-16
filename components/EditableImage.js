@@ -2,7 +2,7 @@ import { FileDrop } from "react-file-drop";
 import { useState } from "react";
 import Image from "next/image";
 
-export default function editableImage({type, src, onChange, className, editable=false}) {
+export default function EditableImage({type, src, onChange, className, editable=false}) {
     const [file, setFile] = useState(false)
     const [isFileOver, setIsFileOver] = useState(false)
     const [isUploading, setIsUploading] = useState(false)

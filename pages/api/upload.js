@@ -33,9 +33,11 @@ export default async function handle(req, res) {
             Key: fileInfo.path.split("/")[1],
             ContentType: fileInfo.headers['content-type'],
         }, async (err, data) => {
-            const user = await User.findByIdAndUpdate(
-                session.user.id,
-                {[type]: data.Location})
+            if ( type === 'cover' || type === 'image' ) {
+                await User.findByIdAndUpdate(
+                    session.user.id,
+                    {[type]: data.Location})
+            }
             fs.unlinkSync(fileInfo.path, err => {
                 if (err) throw err;
             })

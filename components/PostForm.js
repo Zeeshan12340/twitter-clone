@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import axios from 'axios';
 import Avatar from './Avatar';
+import Upload from './Upload';
+import Image from 'next/image';
 
 export default function PostForm({userInfo, onPost, compact, parent, onChange}) {
     const [text, setText] = useState('');
+    const [images, setImages] = useState([]);
 
     async function handleTweet(e) {
         e.preventDefault();
-        await axios.post('/api/posts', {text, parent});
+        await axios.post('/api/posts', {text, parent, images});
         setText('');
+        setImages([]);
         
         if (onPost) {
             onPost();
@@ -20,9 +24,25 @@ export default function PostForm({userInfo, onPost, compact, parent, onChange}) 
         <div className={( compact? 'items-center ':'') + "flex"}>
           <Avatar src={userInfo?.image} big classNames={'mt-1'} onChange={onChange} />
           <div className="flex-grow pl-4">
-            <textarea className={(compact? 'h-10': 'h-24') + " w-full p-2 bg-transparent text-socialWhite"}
-            placeholder={(compact? "Tweet your reply":"What's happening?")}
-                value={text} onChange={e => setText(e.target.value)}></textarea>
+            <Upload onUploadFinish={src => setImages(prev => [...prev, src])}>
+                {({isUploading}) => (
+                    <div>
+                      {isUploading && (
+                        <div className='flex'>Uploading...</div>
+                      )}
+                      <textarea className={(compact? 'h-10': 'h-24') + " w-full p-2 bg-transparent text-socialWhite"}
+                        placeholder={(compact? "Tweet your reply":"What's happening?")}
+                        value={text} onChange={e => setText(e.target.value)}></textarea>
+                      <div className='flex -mx-2'>
+                        {images.length > 0 && images.map(image => (
+                          <div key={image} className='h-24 m-2'>
+                            <Image width={300} height={300} className='h-24 w-auto' src={image} alt='' />
+                          </div>
+                        ))}
+                      </div>
+                  </div>
+                )}
+            </Upload>
             {!compact && (
               <div className="text-right border-t border-socialBorder pt-2 pb-2">
                 <button className="bg-socialCyan text-white rounded-full px-4 py-2">Tweet</button>

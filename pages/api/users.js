@@ -1,3 +1,4 @@
+import Follow from "@/models/Follow";
 import { initDb } from "../../lib/mongoose";
 import User from "../../models/User";
 import { authOptions } from "./auth/[...nextauth]";
@@ -12,7 +13,9 @@ export default async function Users(req, res) {
         const user = id ?
         await User.findById(id):
         await User.findOne({username});
-        res.json({id, user});
+
+        const follow = await Follow.findOne({source: session.user.id, destination: user._id})
+        res.json({id, user, follow});
     }
     if (req.method === 'PUT') {
         const username = req.body.username;

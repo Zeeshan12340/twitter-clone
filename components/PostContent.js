@@ -2,11 +2,28 @@ import ReactTimeAgo from "react-time-ago";
 import Avatar from "./Avatar";
 import Link from 'next/link'
 import PostButtons from "./PostButtons";
+import Image from "next/image";
 
 export default function PostContent({ 
     author, text, createdAt,
-    _id, likesCount, likedByMe, commentsCount,
+    _id, likesCount, likedByMe, commentsCount, images,
     big=false }) {
+
+    function showImages() {
+        if (!images.length) {
+            return ''
+        }
+        return (
+            <div className="flex -mx-1">
+                {images && images.length > 0 && images.map(image => (
+                    <div key={image} className="m-1">
+                        <Image width={300} height={300} src={image} alt='' />
+                    </div>
+                ))}
+            </div>
+        )
+    }
+
     return (
         <div>
             <div className="flex w-full">
@@ -34,6 +51,7 @@ export default function PostContent({
                     <Link href={`/${author.username}/status/${_id}`}>
                         <div className="mb-4">
                             {text}
+                            {showImages()}
                         </div>
                     </Link>
                     <PostButtons username={author.username} id={_id} likesCount={likesCount} likedByMe={likedByMe} commentsCount={commentsCount} />
@@ -44,6 +62,7 @@ export default function PostContent({
                     <Link href={`/${author.username}/status/${_id}`}>
                         <div className="w-full">
                             {text}
+                            {showImages()}
                         </div>
                     </Link>
                     {createdAt && (

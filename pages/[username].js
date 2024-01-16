@@ -7,6 +7,7 @@ import PostContent from '@/components/PostContent'
 import Cover from '@/components/Cover'
 import Avatar from '@/components/Avatar'
 import useUserInfo from '@/hooks/UseUserInfo'
+import { set } from 'mongoose'
 
 export default function UserPage() {
     const router = useRouter()
@@ -17,6 +18,7 @@ export default function UserPage() {
     const [posts, setPosts] = useState([])
     const [postsLikedByMe, setPostsLikedByMe] = useState([])
     const [editMode, setEditMode] = useState(false)
+    const [isFollowing, setIsFollowing] = useState(false)
 
     useEffect(() => {
         if (!username) return;
@@ -24,6 +26,7 @@ export default function UserPage() {
         .then(response => {
             setProfileInfo(response.data.user)
             setOriginalUserInfo(response.data.user)
+            setIsFollowing(!!response.data.follow)
         })
     }, [username])
 
@@ -55,6 +58,14 @@ export default function UserPage() {
 
     const isMyProfile = profileInfo?._id === userInfo?._id
 
+    async function toggleFollow() {
+        setIsFollowing(prev => !prev)
+        await axios.post('/api/followers', {
+            source: userInfo._id,
+            destination: profileInfo._id
+        })
+    }
+
     return (
         <Layout>
             {!!profileInfo && (
@@ -76,7 +87,10 @@ export default function UserPage() {
                         </div>
                         <div className='p-2'>
                             {!isMyProfile && (
-                                <button className='bg-socialCyan text-white rounded-full px-4 py-2'>Follow</button>
+                                <button onClick={toggleFollow}
+                                    className={(isFollowing?'bg-socialWhite text-black hover:bg-red-300':'bg-socialCyan text-white') + ' rounded-full px-4 py-2'} >
+                                    {isFollowing ? 'Following' : 'Follow'}
+                                </button>
                             )}
                             {isMyProfile && !editMode && (
                                 <button onClick={() => {setEditMode(true)}} className='bg-socialLightGrey text-socialCyan rounded-full px-4 py-2 ml-2'>Edit Profile</button>

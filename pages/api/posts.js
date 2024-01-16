@@ -11,7 +11,13 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
         const {id} = req.query
         if (id) {
-            res.status(200).json(await Post.findById(id).populate('author').exec());
+            res.status(200).json(await Post.findById(id)
+            .populate('author')
+            .populate({
+                path: 'parent',
+                populate: 'author'
+            })
+            .exec());
         } else {
             const parent = req.query.parent || null;
             const author = req.query.author || null;
@@ -36,9 +42,9 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-        const {text, parent} = req.body;
+        const {text, parent, images} = req.body;
         if (!text) return res.status(400).json({message: 'Missing text'});
-        const post = await Post.create({author: session.user.id, text, parent});
+        const post = await Post.create({author: session.user.id, text, parent, images});
         if (parent) {
             const parentPost = await Post.findById(parent);
             parentPost.commentsCount = await Post.countDocuments({parent});

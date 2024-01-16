@@ -32,7 +32,7 @@ export default function PostPage() {
         if (!id) return;
 
         fetchData();
-    }, [id])
+    }, )
 
     async function logout() {
         setUserInfo(null)
@@ -41,10 +41,18 @@ export default function PostPage() {
 
     return (
         <Layout userInfo logout={logout} >
-            {post && (
+            {!!post?._id && (
                 <div className='px-5 py-2'>
                     <Navigation />
-                    <PostContent {...post} big />
+                    {post.parent && (
+                        <div className=''>
+                            <PostContent {...post.parent } />
+                            <div className='h-12 border-l-2 border-socialBorder ml-6'></div>
+                        </div>
+                    )}
+                    <div>
+                        <PostContent {...post} />
+                    </div>
                 </div>
             )}
             {!!userInfo && (

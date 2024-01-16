@@ -53,6 +53,12 @@ export default function Home() {
         <div className="">
           {posts.length > 0 && posts.map(post => (
             <div key={post._id} className="border-t border-socialBorder p-5">
+              {post.parent && (
+                <div>
+                  <PostContent {...post.parent} />
+                  <div className="h-12 border-l-2 border-socialBorder ml-6"></div>
+                </div>
+              )}
               <PostContent {...post} likedByMe={idsLikedByMe.includes(post._id)} />
             </div>
           ))}
