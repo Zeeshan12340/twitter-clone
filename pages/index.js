@@ -15,12 +15,15 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    if (UserInfoStatus === 'loaded' && userInfo?.username === undefined) {
+    if (UserInfoStatus === 'loaded' && userInfo?.email === undefined) {
       router.push('/login')
     }
   }, [UserInfoStatus, userInfo, router])
 
   useEffect(() => {
+    if (userInfo?.username === undefined) {
+      <UsernameForm />
+    }
     fetchHomePosts()
   })
 
@@ -40,10 +43,6 @@ export default function Home() {
   async function logout() {
     setUserInfo(null)
     await signOut()
-  }
-  
-  if (UserInfoStatus === 'loaded' && userInfo?.username === undefined) {
-    return <UsernameForm />;
   }
 
   return (

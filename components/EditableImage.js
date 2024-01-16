@@ -49,11 +49,9 @@ export default function editableImage({type, src, onChange, className, editable=
                         <div className="absolute inset-0 flex items-center justify-center" 
                             style={{backgroundColor:'rgba(48, 148, 216, 0.9)'}} >uploading...</div>
                     )}
-                    {src && (
-                        <div className={"flex items-center overflow-hidden " + className}>
-                            <Image src={src} width={70} height={70} className={type == "image"?"rounded-full border-4 border-black":"" + " w-full h-full"} alt="cover" />
-                        </div>
-                    )}
+                    <div className={"items-center overflow-hidden " + className}>
+                        {src && <Image src={src} width={70} height={70} className={type == "image"?"rounded-full border-4 border-black":"" + " w-full h-full"} alt="cover" />}
+                    </div>
             </div>
         </FileDrop>
     )

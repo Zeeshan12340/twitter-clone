@@ -1,4 +1,3 @@
-import initDb from '../../lib/mongoose';
 import { authOptions } from "./auth/[...nextauth]";
 import { getServerSession } from "next-auth"
 import Like from "../../models/Like";
