@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FileDrop } from 'react-file-drop'
 
 export default function Upload({ children, onUploadFinish }) {
     const [file, setFile] = useState(false)
     const [isFileOver, setIsFileOver] = useState(false)
     const [isUploading, setIsUploading] = useState(false)
+    const [isClient, setIsClient] = useState(false);
 
     function uploadImage(files, event) {
         event.preventDefault();
@@ -24,7 +25,13 @@ export default function Upload({ children, onUploadFinish }) {
         })
     }
 
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
     return (
+        <>
+        {isClient &&
         <div className="border-4 border-red-500">
             <FileDrop 
                 onDrop={uploadImage}
@@ -44,6 +51,7 @@ export default function Upload({ children, onUploadFinish }) {
                     {children({isUploading})}
                 </div>
             </FileDrop>
-        </div>
+        </div>}
+        </>
     )
 }

@@ -1,11 +1,12 @@
 import { FileDrop } from "react-file-drop";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function EditableImage({type, src, onChange, className, editable=false}) {
     const [file, setFile] = useState(false)
     const [isFileOver, setIsFileOver] = useState(false)
     const [isUploading, setIsUploading] = useState(false)
+    const [isClient, setIsClient] = useState(false);
 
     let extraClass = ''
     if (file) extraClass = ' bg-red-500 opacity-40 '
@@ -31,7 +32,13 @@ export default function EditableImage({type, src, onChange, className, editable=
         })
     }
 
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
     return (
+        <>
+        {isClient && (
         <FileDrop 
             onDrop={updateImage}
             onDragOver={() => {setIsFileOver(true)}}
@@ -53,6 +60,7 @@ export default function EditableImage({type, src, onChange, className, editable=
                         {src && <Image src={src} width={70} height={70} className={type == "image"?"rounded-full border-4 border-black":"" + " w-full h-full"} alt="cover" />}
                     </div>
             </div>
-        </FileDrop>
+        </FileDrop>)}
+        </>
     )
 }

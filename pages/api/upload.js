@@ -18,10 +18,7 @@ export default async function handle(req, res) {
         },
     })
 
-    const form = new multiparty.Form({
-        autoFiles: true,
-        uploadDir: './public',
-    })
+    const form = new multiparty.Form()
     form.parse(req, async (err, fields, files) => {
         if (err) throw err;
         const type = Object.keys(files)[0]
@@ -30,7 +27,7 @@ export default async function handle(req, res) {
             Bucket: 'social-clone',
             Body: fs.readFileSync(fileInfo.path),
             ACL: 'public-read',
-            Key: fileInfo.path.split("/")[1],
+            Key: fileInfo.path.split("/").slice(-1)[0],
             ContentType: fileInfo.headers['content-type'],
         }, async (err, data) => {
             if ( type === 'cover' || type === 'image' ) {
