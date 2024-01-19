@@ -39,7 +39,9 @@ export default function PostContent({
                             {big && (<br />)}
                             <span className="text-socialLightGrey">@{author.username}</span>
                             {createdAt && !big && (
-                                <span className="pl-1 text-socialLightGrey"><ReactTimeAgo date={createdAt} timeStyle={"twitter"}/></span>
+                                <span className="pl-1 text-socialLightGrey">
+                                    <ReactTimeAgo date={new Date(createdAt)} timeStyle={"twitter"} />
+                                </span>
                             )}
                         </Link>
                     </div>
