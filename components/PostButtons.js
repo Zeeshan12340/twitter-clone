@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { useState } from 'react'
 import Link from 'next/link'
 
@@ -12,7 +11,13 @@ export default function PostButtons({ id, username,
 
     async function toggleLike() {
         console.log("toggleLike")
-        const response = await axios.post('/api/like', { id })
+        const response = await fetch('/api/like', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id }),
+        });
         if (response.data.isLiked) {
             setLikesCount(likesCount + 1)
             setLikedByMe(true)

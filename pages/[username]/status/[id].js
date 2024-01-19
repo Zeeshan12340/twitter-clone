@@ -4,7 +4,6 @@ import Layout from '@/components/layout'
 import UseUserInfo from '@/hooks/UseUserInfo'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import Navigation from '@/components/Navigation'
 import { signOut } from 'next-auth/react'
 
@@ -21,10 +20,11 @@ export default function PostPage() {
         const data = await response.json();
         setPost(data);
 
-        axios.get('/api/posts?parent=' + id)
-        .then(response => {
-            setReplies(response.data.posts)
-            setRepliesLikedByMe(response.data.idsLikedByMe)
+        fetch('/api/posts?parent=' + id)
+        .then(response => response.json())
+        .then(data => {
+            setReplies(data.posts)
+            setRepliesLikedByMe(data.idsLikedByMe)
         })
     };
 

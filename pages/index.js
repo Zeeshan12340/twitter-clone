@@ -2,7 +2,6 @@ import PostForm from "@/components/PostForm";
 import UsernameForm from "../components/UsernameForm"
 import useUserInfo from "../hooks/UseUserInfo"
 import { useState, useEffect } from "react";
-import axios from "axios";
 import PostContent from "@/components/PostContent";
 import Layout from "@/components/layout";
 import { signOut } from "next-auth/react";
@@ -29,10 +28,12 @@ export default function Home() {
   }
 
   function fetchHomePosts() {
-    axios.get('/api/posts').then(res => {
-      setPosts(res.data.posts)
-      setIdsLikedByMe(res.data.idsLikedByMe)
-    })
+    fetch('/api/posts')
+      .then(response => response.json())
+      .then(data => {
+        setPosts(data.posts);
+        setIdsLikedByMe(data.idsLikedByMe);
+      })
   }
 
   async function logout() {

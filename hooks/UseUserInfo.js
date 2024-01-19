@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import axios from 'axios';
 
 export default function UseUserInfo() {
     const {data: Session, status} = useSession();
@@ -9,10 +8,11 @@ export default function UseUserInfo() {
     async function getUserInfo() {
       if (status === 'loading') return;
       if (Session === null) return;
-      axios.get('/api/users?id=' + Session.user.id)
-      .then(response => {
-        setUserInfo(response.data.user);
-      })
+      fetch('/api/users?id=' + Session.user.id)
+        .then(response => response.json())
+        .then(data => {
+          setUserInfo(data.user);
+        })
     }
 
     useEffect(() => {

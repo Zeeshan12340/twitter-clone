@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import axios from 'axios';
 import Avatar from './Avatar';
 import Upload from './Upload';
 import Image from 'next/image';
@@ -10,7 +9,13 @@ export default function PostForm({userInfo, onPost, compact, parent, onChange}) 
 
     async function handleTweet(e) {
         e.preventDefault();
-        await axios.post('/api/posts', {text, parent, images});
+        await fetch('/api/posts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({text, parent, images}),
+        });
         setText('');
         setImages([]);
         
@@ -32,7 +37,7 @@ export default function PostForm({userInfo, onPost, compact, parent, onChange}) 
                       )}
                       <textarea className={(compact? 'h-10': 'h-24') + " w-full p-2 bg-transparent text-socialWhite"}
                         placeholder={(compact? "Tweet your reply":"What's happening?")}
-                        value={text} onChange={e => setText(e.target.value)}></textarea>
+                        value={text} onChange={e => setText(e.target.value)} id='post'></textarea>
                       <div className='flex -mx-2'>
                         {images.length > 0 && images.map(image => (
                           <div key={image} className='h-24 m-2'>

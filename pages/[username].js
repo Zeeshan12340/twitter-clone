@@ -2,12 +2,10 @@ import Layout from '@/components/layout'
 import { useRouter } from 'next/router'
 import Navigation from '@/components/Navigation'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import PostContent from '@/components/PostContent'
 import Cover from '@/components/Cover'
 import Avatar from '@/components/Avatar'
 import useUserInfo from '@/hooks/UseUserInfo'
-import { set } from 'mongoose'
 
 export default function UserPage() {
     const router = useRouter()
@@ -22,20 +20,22 @@ export default function UserPage() {
 
     useEffect(() => {
         if (!username) return;
-        axios.get('/api/users?username=' + username)
-        .then(response => {
-            setProfileInfo(response.data.user)
-            setOriginalUserInfo(response.data.user)
-            setIsFollowing(!!response.data.follow)
+        fetch('/api/users?username=' + username)
+        .then(response => response.json())
+        .then(data => {
+            setProfileInfo(data.user)
+            setOriginalUserInfo(data.user)
+            setIsFollowing(data.follow)
         })
     }, [username])
 
     useEffect(() => {
         if (!profileInfo?._id) return;
-        axios.get('/api/posts?author=' + profileInfo._id)
-        .then(response => {
-            setPosts(response.data.posts)
-            setPostsLikedByMe(response.data.idsLikedByMe)
+        fetch('/api/posts?author=' + profileInfo._id)
+        .then(response => response.json())
+        .then(data => {
+            setPosts(data.posts)
+            setPostsLikedByMe(data.idsLikedByMe)
         })
     }, [profileInfo])
 
@@ -46,8 +46,10 @@ export default function UserPage() {
     async function updateProfile() {
         const {bio, name, username} = profileInfo
         setEditMode(false)
-        await axios.put('/api/profile', {
-            bio, name, username
+        await fetch('/api/profile', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bio, name, username })
         })
     }
 
@@ -60,10 +62,16 @@ export default function UserPage() {
 
     async function toggleFollow() {
         setIsFollowing(prev => !prev)
-        await axios.post('/api/followers', {
-            source: userInfo._id,
-            destination: profileInfo._id
-        })
+        await fetch('/api/followers', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                source: userInfo._id,
+                destination: profileInfo._id
+            }),
+        });
     }
 
     return (
