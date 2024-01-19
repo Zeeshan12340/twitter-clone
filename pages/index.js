@@ -9,16 +9,11 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 
 export default function Home() {
-  const {userInfo, setUserInfo, UserInfoStatus} = useUserInfo();
+  const {userInfo, setUserInfo, status} = useUserInfo();
   const [posts, setPosts] = useState([])
   const [idsLikedByMe, setIdsLikedByMe] = useState([])
   const router = useRouter()
 
-  useEffect(() => {
-    if (UserInfoStatus === 'loaded' && userInfo?.email === undefined) {
-      router.push('/login')
-    }
-  }, [UserInfoStatus, userInfo, router])
 
   useEffect(() => {
     if (userInfo?.username === undefined) {
@@ -27,7 +22,7 @@ export default function Home() {
     fetchHomePosts()
   })
 
-  if (UserInfoStatus === 'loading') {
+  if (status === 'loading') {
     return (
       <div>Loading...</div>
     )
@@ -49,7 +44,9 @@ export default function Home() {
     <>
       <Layout userInfo={userInfo} logout={logout} >
         <h1 className="text-lg font-bold p-4">Home</h1>
-        <PostForm userInfo={userInfo} onPost={() => {fetchHomePosts()}} />
+        {userInfo && (
+          <PostForm userInfo={userInfo} onPost={() => {fetchHomePosts()}} />
+        )}
         <div className="">
           {posts.length > 0 && posts.map(post => (
             <div key={post._id} className="border-t border-socialBorder p-5">
