@@ -57,7 +57,7 @@ export default function EditableImage({type, src, onChange, className, editable=
                             style={{backgroundColor:'rgba(48, 148, 216, 0.9)'}} >uploading...</div>
                     )}
                     <div className={"items-center overflow-hidden " + className}>
-                        {src && <Image src={src} width={70} height={70} priority={true} className={type == "image"?"rounded-full border-4 border-black":"" + " w-full h-full"} alt="cover" />}
+                        {src && <Image src={src} width={70} height={70} priority={true} className={type === "image"?"rounded-full border-4 border-black w-full h-full":"w-full h-full"} alt="cover" />}
                     </div>
             </div>
         </FileDrop>)}

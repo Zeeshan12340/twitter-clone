@@ -87,7 +87,7 @@ export default function UserPage() {
                     <div className='flex justify-between'>
                         <div className='ml-5 max-w-1 relative'>
                             <div className='absolute -top-10 '>
-                                <Avatar big src={profileInfo.image} editable={isMyProfile}
+                                <Avatar big src={profileInfo.image} type={'image'} editable={isMyProfile}
                                 onChange={src => updateUserImage('image', src)}
                                 classNames={''}
                                 />
