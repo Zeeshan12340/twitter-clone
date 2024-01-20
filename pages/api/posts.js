@@ -3,13 +3,16 @@ import Post from "../../models/Post";
 import { authOptions } from "./auth/[...nextauth]";
 import { getServerSession } from "next-auth"
 import Like from "../../models/Like";
+import User from "@/models/User";
 
 export default async function handler(req, res) {
     await initDb();
     const session = await getServerSession(req, res, authOptions)
 
     if (req.method === 'GET') {
-        const {id} = req.query
+        const {id} = req.query || null;
+        await User.findById(id);
+
         if (id) {
             res.status(200).json(await Post.findById(id)
             .populate('author')
