@@ -5,7 +5,7 @@ export default function Avatar({ src, classNames, big, onChange, editable=false 
 
     return (
         <div className="rounded-full overflow-hidden">
-            <EditableImage type='image' src={src} 
+            <EditableImage src={src} 
             onChange={onChange} editable={editable}
             className={classNames + " rounded-full overflow-hidden mb-2 " + width} />
         </div>

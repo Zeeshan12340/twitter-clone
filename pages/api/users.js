@@ -14,7 +14,7 @@ export default async function Users(req, res) {
         await User.findById(id):
         await User.findOne({username});
 
-        const follow = await Follow.findOne({source: session.user.id, destination: user._id})
+        const follow = await Follow.findOne({source: session?.user.id, destination: user._id})
         res.json({id, user, follow});
     }
     if (req.method === 'PUT') {
