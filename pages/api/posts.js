@@ -29,7 +29,7 @@ export default async function handler(req, res) {
             const posts = await Post.find(searchFilter)
             .populate('author')
             .sort({createdAt: -1})
-            .limit(20)
+            .limit(30)
             .exec();
 
             const postsLikedByMe = await Like.find({ 
