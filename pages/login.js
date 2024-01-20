@@ -15,7 +15,7 @@ export default function Login({providers}) {
     }
     return (
         <div className="flex items-center justify-center h-screen">
-            {Object.values(providers).map(provider => (
+            {providers && Object.values(providers).map(provider => (
                 <div key={provider.id}>
                     <button onClick={() => {signIn(provider.id)}} className='flex bg-socialCyan pl-4 pr-3 py-2 text-black rounded-full items-center'>
                         <Image src={`/${provider.name}.png`} alt='' width={25} height={25} />&nbsp;
