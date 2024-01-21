@@ -5,21 +5,22 @@ import { useState, useEffect } from "react";
 import PostContent from "@/components/PostContent";
 import Layout from "@/components/layout";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/router";
 
 export default function Home() {
   const {userInfo, setUserInfo, status} = useUserInfo();
   const [posts, setPosts] = useState([])
   const [idsLikedByMe, setIdsLikedByMe] = useState([])
-  const router = useRouter()
-
 
   useEffect(() => {
-    if (userInfo?.username === undefined) {
-      <UsernameForm />
-    }
+    if (status === 'loading') return;
     fetchHomePosts()
-  })
+  }, [status])
+
+  if (status === "authenticated" && userInfo?.username === undefined) {
+    return (
+      <UsernameForm />
+    )
+  }
 
   if (status === 'loading') {
     return (

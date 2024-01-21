@@ -19,6 +19,14 @@ export default async function Users(req, res) {
     }
     if (req.method === 'PUT') {
         const username = req.body.username;
+        // check if username already exists
+        await User.findOne({username})
+            .then(user => {
+                if (user) {
+                    res.status(400).json({error: 'Username already exists'})
+                }
+            })
+        // else update username
         await User.findByIdAndUpdate(session.user.id, {username})
         res.json('ok')
     }

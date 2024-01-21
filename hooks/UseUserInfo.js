@@ -8,7 +8,7 @@ export default function UseUserInfo() {
     async function getUserInfo() {
       if (status === 'loading') return;
       if (Session === null) return;
-      fetch('/api/users?id=' + Session.user.id)
+      fetch('/api/users?id=' + Session?.user.id)
         .then(response => response.json())
         .then(data => {
           setUserInfo(data.user);
