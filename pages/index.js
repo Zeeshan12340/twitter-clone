@@ -16,7 +16,7 @@ export default function Home() {
     fetchHomePosts()
   }, [status])
 
-  if (status === "authenticated" && userInfo?.username === undefined) {
+  if (status === "authenticated" && !!userInfo && userInfo?.username === undefined) {
     return (
       <UsernameForm />
     )
